@@ -294,55 +294,140 @@ function setLanguage(lang) {
     }
 }
 
-// Regional emergency contacts and pharmacies of guard databases
-const regionalEmergencies = {
-    ma: {
-        medical: "150",
-        police: "19",
-        pharmacy: [
-            { name: "Pharmacie du Centre (Casablanca)", hours: "24/7" },
-            { name: "Pharmacie de Garde (Rabat)", hours: "20:00 - 08:00" }
-        ]
-    },
-    tr: {
-        medical: "112",
-        police: "155",
-        pharmacy: [
-            { name: "Istanbul Nöbetçi Eczane", hours: "24/7" },
-            { name: "Ankara Merkez Eczanesi", hours: "24/7" }
-        ]
-    },
-    ae: {
-        medical: "998",
-        police: "901",
-        pharmacy: [
-            { name: "Aster Pharmacy Dubai Marina", hours: "24/7" },
-            { name: "Life Pharmacy Abu Dhabi", hours: "24/7" }
-        ]
-    },
-    dz: {
-        medical: "115",
-        police: "17",
-        pharmacy: [
-            { name: "Pharmacie Didouche (Alger)", hours: "24/7" }
-        ]
-    },
-    tn: {
-        medical: "190",
-        police: "197",
-        pharmacy: [
-            { name: "Pharmacie Avenue Habib Bourguiba", hours: "24/7" }
-        ]
-    },
-    eg: {
-        medical: "123",
-        police: "122",
-        pharmacy: [
-            { name: "El Ezaby Pharmacy (Cairo)", hours: "24/7" },
-            { name: "Seif Pharmacies (Alexandria)", hours: "24/7" }
-        ]
-    }
-};
+// Global emergency contacts, centers, coordinates and pharmacies database
+const globalCountriesList = [
+    { code: "ma", nameEn: "Morocco", nameFr: "Maroc", nameAr: "المغرب", medical: "150", police: "19", latLng: [31.7917, -7.0926], isRich: true, pharmacy: [
+        { name: "Pharmacie du Centre (Casablanca)", hours: "24/7" },
+        { name: "Pharmacie de Garde (Rabat)", hours: "20:00 - 08:00" }
+    ]},
+    { code: "dz", nameEn: "Algeria", nameFr: "Algérie", nameAr: "الجزائر", medical: "115", police: "17", latLng: [28.0339, 1.6596], isRich: true, pharmacy: [
+        { name: "Pharmacie Didouche (Alger)", hours: "24/7" }
+    ]},
+    { code: "tn", nameEn: "Tunisia", nameFr: "Tunisie", nameAr: "تونس", medical: "190", police: "197", latLng: [33.8869, 9.5375], isRich: true, pharmacy: [
+        { name: "Pharmacie Avenue Habib Bourguiba", hours: "24/7" }
+    ]},
+    { code: "ly", nameEn: "Libya", nameFr: "Libye", nameAr: "ليبيا", medical: "193", police: "191", latLng: [26.3351, 17.2283], isRich: true, pharmacy: [
+        { name: "Central Tripoli Pharmacy", hours: "24/7" }
+    ]},
+    { code: "eg", nameEn: "Egypt", nameFr: "Égypte", nameAr: "مصر", medical: "123", police: "122", latLng: [26.8206, 30.8025], isRich: true, pharmacy: [
+        { name: "El Ezaby Pharmacy (Cairo)", hours: "24/7" },
+        { name: "Seif Pharmacies (Alexandria)", hours: "24/7" }
+    ]},
+    { code: "sn", nameEn: "Senegal", nameFr: "Sénégal", nameAr: "السنغال", medical: "1515", police: "17", latLng: [14.4974, -14.4524], isRich: true, pharmacy: [
+        { name: "Pharmacie de la Nation (Dakar)", hours: "24/7" }
+    ]},
+    { code: "ci", nameEn: "Ivory Coast", nameFr: "Côte d'Ivoire", nameAr: "ساحل العاج", medical: "185", police: "170", latLng: [7.5399, -5.5471], isRich: true, pharmacy: [
+        { name: "Pharmacie du Plateau (Abidjan)", hours: "24/7" }
+    ]},
+    { code: "cm", nameEn: "Cameroon", nameFr: "Cameroun", nameAr: "الكاميرون", medical: "119", police: "117", latLng: [7.3697, 12.3547], isRich: true, pharmacy: [
+        { name: "Pharmacie du Centre (Yaoundé)", hours: "24/7" }
+    ]},
+    { code: "gh", nameEn: "Ghana", nameFr: "Ghana", nameAr: "غانا", medical: "193", police: "191", latLng: [7.9465, -1.0232], isRich: true, pharmacy: [
+        { name: "Kempinski Pharmacy (Accra)", hours: "24/7" }
+    ]},
+    { code: "et", nameEn: "Ethiopia", nameFr: "Éthiopie", nameAr: "إثيوبيا", medical: "907", police: "991", latLng: [9.1450, 40.4897], isRich: true, pharmacy: [
+        { name: "Bole Road Pharmacy (Addis Ababa)", hours: "24/7" }
+    ]},
+    { code: "rw", nameEn: "Rwanda", nameFr: "Rwanda", nameAr: "رواندا", medical: "112", police: "112", latLng: [-1.9403, 29.8739], isRich: true, pharmacy: [
+        { name: "Kigali Heights Pharmacy", hours: "24/7" }
+    ]},
+    { code: "za", nameEn: "South Africa", nameFr: "Afrique du Sud", nameAr: "جنوب أفريقيا", medical: "10177", police: "10111", latLng: [-30.5595, 22.9375], isRich: true, pharmacy: [
+        { name: "Clicks Pharmacy V&A Waterfront", hours: "24/7" }
+    ]},
+    { code: "ke", nameEn: "Kenya", nameFr: "Kenya", nameAr: "كينيا", medical: "999", police: "999", latLng: [-0.0236, 37.9062], isRich: true, pharmacy: [
+        { name: "Portal Pharmacy (Nairobi)", hours: "24/7" }
+    ]},
+    { code: "ng", nameEn: "Nigeria", nameFr: "Nigéria", nameAr: "نيجيريا", medical: "112", police: "112", latLng: [9.0820, 8.6753], isRich: true, pharmacy: [
+        { name: "HealthPlus Pharmacy (Lagos)", hours: "24/7" }
+    ]},
+    { code: "ae", nameEn: "United Arab Emirates", nameFr: "Émirats Arabes Unis", nameAr: "الإمارات العربية المتحدة", medical: "998", police: "901", latLng: [23.4241, 53.8478], isRich: true, pharmacy: [
+        { name: "Aster Pharmacy Dubai Marina", hours: "24/7" },
+        { name: "Life Pharmacy Abu Dhabi", hours: "24/7" }
+    ]},
+    { code: "sa", nameEn: "Saudi Arabia", nameFr: "Arabie Saoudite", nameAr: "المملكة العربية السعودية", medical: "997", police: "999", latLng: [23.8859, 45.0792], isRich: true, pharmacy: [
+        { name: "Al Dawaa Pharmacy (Riyadh)", hours: "24/7" },
+        { name: "Nahdi Pharmacy (Jeddah)", hours: "24/7" }
+    ]},
+    { code: "qa", nameEn: "Qatar", nameFr: "Qatar", nameAr: "قطر", medical: "999", police: "999", latLng: [25.3548, 51.1839], isRich: true, pharmacy: [
+        { name: "Wellcare Pharmacy (Doha)", hours: "24/7" }
+    ]},
+    { code: "kw", nameEn: "Kuwait", nameFr: "Koweït", nameAr: "الكويت", medical: "112", police: "112", latLng: [29.3759, 47.9774], isRich: true, pharmacy: [
+        { name: "Royal Pharmacy (Kuwait City)", hours: "24/7" }
+    ]},
+    { code: "om", nameEn: "Oman", nameFr: "Oman", nameAr: "عمان", medical: "9999", police: "9999", latLng: [21.5126, 55.9233], isRich: true, pharmacy: [
+        { name: "Muscat Pharmacy", hours: "24/7" }
+    ]},
+    { code: "bh", nameEn: "Bahrain", nameFr: "Bahreïn", nameAr: "البحرين", medical: "999", police: "999", latLng: [26.0667, 50.5577], isRich: true, pharmacy: [
+        { name: "Jaffer Pharmacy (Manama)", hours: "24/7" }
+    ]},
+    { code: "jo", nameEn: "Jordan", nameFr: "Jordanie", nameAr: "الأردن", medical: "911", police: "911", latLng: [30.5852, 36.2384], isRich: true, pharmacy: [
+        { name: "One Pharmacy (Amman)", hours: "24/7" }
+    ]},
+    { code: "lb", nameEn: "Lebanon", nameFr: "Liban", nameAr: "لبنان", medical: "140", police: "112", latLng: [33.8547, 35.8623], isRich: true, pharmacy: [
+        { name: "Mazzen Pharmacy (Beirut)", hours: "24/7" }
+    ]},
+    { code: "iq", nameEn: "Iraq", nameFr: "Irak", nameAr: "العراق", medical: "122", police: "104", latLng: [33.2232, 43.6793], isRich: true, pharmacy: [
+        { name: "Al-Harthiya Pharmacy (Baghdad)", hours: "24/7" }
+    ]},
+    { code: "ye", nameEn: "Yemen", nameFr: "Yémen", nameAr: "اليمن", medical: "191", police: "199", latLng: [15.5527, 48.5164], isRich: true, pharmacy: [
+        { name: "Sanaa Central Pharmacy", hours: "24/7" }
+    ]},
+    { code: "sy", nameEn: "Syria", nameFr: "Syrie", nameAr: "سوريا", medical: "110", police: "112", latLng: [34.8021, 38.9968], isRich: true, pharmacy: [
+        { name: "Al-Sham Pharmacy (Damascus)", hours: "24/7" }
+    ]},
+    { code: "ps", nameEn: "Palestine", nameFr: "Palestine", nameAr: "فلسطين", medical: "101", police: "100", latLng: [31.9522, 35.2332], isRich: true, pharmacy: [
+        { name: "Al-Quds Pharmacy (Ramallah)", hours: "24/7" }
+    ]},
+    { code: "tr", nameEn: "Turkey", nameFr: "Turquie", nameAr: "تركيا", medical: "112", police: "155", latLng: [38.9637, 35.2433], isRich: true, pharmacy: [
+        { name: "Istanbul Nöbetçi Eczane", hours: "24/7" },
+        { name: "Ankara Merkez Eczanesi", hours: "24/7" }
+    ]},
+    
+    // Europe Fallbacks
+    { code: "fr", nameEn: "France", nameFr: "France", nameAr: "فرنسا", medical: "15", police: "17", latLng: [46.2276, 2.2137], pharmacy: [
+        { name: "Pharmacie de la Mairie (Paris)", hours: "24/7" }
+    ]},
+    { code: "de", nameEn: "Germany", nameFr: "Allemagne", nameAr: "ألمانيا", medical: "112", police: "110", latLng: [51.1657, 10.4515], pharmacy: [
+        { name: "Hauptbahnhof Apotheke (Berlin)", hours: "24/7" }
+    ]},
+    { code: "gb", nameEn: "United Kingdom", nameFr: "Royaume-Uni", nameAr: "المملكة المتحدة", medical: "999", police: "999", latLng: [55.3781, -3.4360], pharmacy: [
+        { name: "Boots Pharmacy Piccadilly (London)", hours: "24/7" }
+    ]},
+    { code: "it", nameEn: "Italy", nameFr: "Italie", nameAr: "إيطاليا", medical: "118", police: "113", latLng: [41.8719, 12.5674], pharmacy: [
+        { name: "Farmacia Centrale (Rome)", hours: "24/7" }
+    ]},
+    { code: "es", nameEn: "Spain", nameFr: "Espagne", nameAr: "إspagne", medical: "112", police: "112", latLng: [40.4637, -3.7492], pharmacy: [
+        { name: "Farmacia 24 Horas (Madrid)", hours: "24/7" }
+    ]},
+    
+    // Americas
+    { code: "us", nameEn: "United States", nameFr: "États-Unis", nameAr: "الولايات المتحدة الأمريكية", medical: "911", police: "911", latLng: [37.0902, -95.7129], pharmacy: [
+        { name: "CVS Pharmacy Times Square (NY)", hours: "24/7" }
+    ]},
+    { code: "ca", nameEn: "Canada", nameFr: "Canada", nameAr: "كندا", medical: "911", police: "911", latLng: [56.1304, -106.3468], pharmacy: [
+        { name: "Shoppers Drug Mart (Toronto)", hours: "24/7" }
+    ]},
+    { code: "mx", nameEn: "Mexico", nameFr: "Mexique", nameAr: "المكسيك", medical: "911", police: "911", latLng: [23.6345, -102.5528], pharmacy: [
+        { name: "Farmacias del Ahorro (CDMX)", hours: "24/7" }
+    ]},
+    { code: "br", nameEn: "Brazil", nameFr: "Brésil", nameAr: "البرازيل", medical: "192", police: "190", latLng: [-14.2350, -51.9253], pharmacy: [
+        { name: "Drogaria São Paulo (Rio)", hours: "24/7" }
+    ]},
+    
+    // Asia & Oceania
+    { code: "jp", nameEn: "Japan", nameFr: "Japon", nameAr: "اليابان", medical: "119", police: "110", latLng: [36.2048, 138.2529], pharmacy: [
+        { name: "Matsumoto Kiyoshi Shibuya (Tokyo)", hours: "24/7" }
+    ]},
+    { code: "cn", nameEn: "China", nameFr: "Chine", nameAr: "الصين", medical: "120", police: "110", latLng: [35.8617, 104.1954], pharmacy: [
+        { name: "Tong Ren Tang Pharmacy (Beijing)", hours: "24/7" }
+    ]},
+    { code: "in", nameEn: "India", nameFr: "Inde", nameAr: "الهند", medical: "112", police: "112", latLng: [20.5937, 78.9629], pharmacy: [
+        { name: "Apollo Pharmacy 24/7 (Mumbai)", hours: "24/7" }
+    ]},
+    { code: "au", nameEn: "Australia", nameFr: "Australie", nameAr: "أستراليا", medical: "000", police: "000", latLng: [-25.2744, 133.7751], pharmacy: [
+        { name: "Chemist Warehouse (Sydney)", hours: "24/7" }
+    ]}
+];
 
 let map;
 let clinicMarkers = {};
@@ -359,31 +444,31 @@ const partnerClinics = [
     { id: 9, name: "Cairo Medical Center", coords: [30.0444, 31.2357], desc: "24/7 Multi-specialty Trauma & Emergency", country: "eg" }
 ];
 
-function populateEmergency(country) {
-    const emergData = regionalEmergencies[country];
+function populateEmergency(countryCode) {
+    const country = globalCountriesList.find(c => c.code === countryCode);
     const hotlineBox = document.getElementById('emergHotlineBox');
     const partnersBox = document.getElementById('emergPartnersBox');
     const clinicsBox = document.getElementById('emergClinicsBox');
     const lang = localStorage.getItem('sanitizor_lang') || 'en';
 
-    if (!hotlineBox || !partnersBox || !emergData) return;
+    if (!hotlineBox || !partnersBox || !country) return;
 
     const labelMedical = lang === 'fr' ? 'Ambulance / Médical' : (lang === 'ar' ? 'الإسعاف / طبي' : 'Ambulance / Medical');
     const labelPolice = lang === 'fr' ? 'Police Secours' : (lang === 'ar' ? 'الشرطة' : 'Police Emergency');
     const copyLabel = lang === 'fr' ? 'Copié !' : (lang === 'ar' ? 'تم النسخ!' : 'Copied!');
 
     hotlineBox.innerHTML = `
-        <div class="emerg-phone" onclick="handleEmergencyCall('${emergData.medical}', this)" style="cursor: pointer;" title="Click to copy & dial">
+        <div class="emerg-phone" onclick="handleEmergencyCall('${country.medical}', this)" style="cursor: pointer;" title="Click to copy & dial">
             <span>🚨 ${labelMedical}</span>
             <span style="display: flex; align-items: center;">
-                <strong>${emergData.medical}</strong>
+                <strong>${country.medical}</strong>
                 <span class="copy-toast">${copyLabel}</span>
             </span>
         </div>
-        <div class="emerg-phone" onclick="handleEmergencyCall('${emergData.police}', this)" style="cursor: pointer; color: var(--primary);" title="Click to copy & dial">
+        <div class="emerg-phone" onclick="handleEmergencyCall('${country.police}', this)" style="cursor: pointer; color: var(--primary);" title="Click to copy & dial">
             <span>🚓 ${labelPolice}</span>
             <span style="display: flex; align-items: center;">
-                <strong>${emergData.police}</strong>
+                <strong>${country.police}</strong>
                 <span class="copy-toast">${copyLabel}</span>
             </span>
         </div>
@@ -391,14 +476,19 @@ function populateEmergency(country) {
 
     const labelPharm = lang === 'fr' ? 'Pharmacies de Garde' : (lang === 'ar' ? 'الصيدليات المناوبة' : 'Pharmacies of Guard');
     let pharmHtml = `<h4>🟢 ${labelPharm}</h4>`;
-    emergData.pharmacy.forEach(ph => {
-        pharmHtml += `
-            <div class="emerg-pharmacy">
-                <strong>${ph.name}</strong>
-                <span>${ph.hours}</span>
-            </div>
-        `;
-    });
+    if (country.pharmacy && country.pharmacy.length > 0) {
+        country.pharmacy.forEach(ph => {
+            pharmHtml += `
+                <div class="emerg-pharmacy">
+                    <strong>${ph.name}</strong>
+                    <span>${ph.hours}</span>
+                </div>
+            `;
+        });
+    } else {
+        const noPharmLabel = lang === 'fr' ? 'Consulter les services locaux' : (lang === 'ar' ? 'يرجى مراجعة الخدمات المحلية' : 'Consult local medical desk');
+        pharmHtml += `<p style="font-size: 13px; color: var(--text-secondary); margin: 0; padding-top: 4px;">${noPharmLabel}</p>`;
+    }
     partnersBox.innerHTML = pharmHtml;
 
     // Populates Partner Clinics Directory List
@@ -407,7 +497,7 @@ function populateEmergency(country) {
         const goLabel = lang === 'fr' ? 'Voir' : (lang === 'ar' ? 'عرض' : 'View');
         let clinicsHtml = `<h4>🏥 ${labelClinics}</h4>`;
         
-        const filteredClinics = partnerClinics.filter(c => c.country === country);
+        const filteredClinics = partnerClinics.filter(c => c.country === countryCode);
         if (filteredClinics.length > 0) {
             filteredClinics.forEach(c => {
                 clinicsHtml += `
@@ -425,6 +515,59 @@ function populateEmergency(country) {
             clinicsHtml += `<p style="font-size: 13px; color: var(--text-secondary);">${noClinicsLabel}</p>`;
         }
         clinicsBox.innerHTML = clinicsHtml;
+    }
+}
+
+function populateEmergencyFallback(customName) {
+    const hotlineBox = document.getElementById('emergHotlineBox');
+    const partnersBox = document.getElementById('emergPartnersBox');
+    const clinicsBox = document.getElementById('emergClinicsBox');
+    const lang = localStorage.getItem('sanitizor_lang') || 'en';
+
+    if (!hotlineBox || !partnersBox) return;
+
+    const labelMedical = lang === 'fr' ? 'Ambulance / Médical' : (lang === 'ar' ? 'الإسعاف / طبي' : 'Ambulance / Medical');
+    const labelPolice = lang === 'fr' ? 'Police Secours' : (lang === 'ar' ? 'الشرطة' : 'Police Emergency');
+    const copyLabel = lang === 'fr' ? 'Copié !' : (lang === 'ar' ? 'تم النسخ!' : 'Copied!');
+
+    hotlineBox.innerHTML = `
+        <div class="emerg-phone" onclick="handleEmergencyCall('112', this)" style="cursor: pointer;" title="Click to copy & dial">
+            <span>🚨 ${labelMedical}</span>
+            <span style="display: flex; align-items: center;">
+                <strong>112 / 911</strong>
+                <span class="copy-toast">${copyLabel}</span>
+            </span>
+        </div>
+        <div class="emerg-phone" onclick="handleEmergencyCall('911', this)" style="cursor: pointer; color: var(--primary);" title="Click to copy & dial">
+            <span>🚓 ${labelPolice}</span>
+            <span style="display: flex; align-items: center;">
+                <strong>911 / 112</strong>
+                <span class="copy-toast">${copyLabel}</span>
+            </span>
+        </div>
+    `;
+
+    const labelPharm = lang === 'fr' ? 'Pharmacies de Garde' : (lang === 'ar' ? 'الصيدليات المناوبة' : 'Pharmacies of Guard');
+    const pharmDesc = lang === 'fr' ? 'Veuillez composer le 112 pour localiser la pharmacie ouverte la plus proche.' : (lang === 'ar' ? 'يرجى الاتصال بالرقم 112 لتحديد أقرب صيدلية مفتوحة.' : 'Please dial 112 to locate the nearest open guard pharmacy.');
+    partnersBox.innerHTML = `
+        <h4>🟢 ${labelPharm}</h4>
+        <p style="font-size: 13px; color: var(--text-secondary); margin: 0; padding-top: 4px;">${pharmDesc}</p>
+    `;
+
+    if (clinicsBox) {
+        const labelClinics = lang === 'fr' ? 'Cliniques Partenaires' : (lang === 'ar' ? 'المراكز الطبية المعتمدة' : 'Verified Partners');
+        const noClinicsLabel = lang === 'fr' ? 'Aucun partenaire enregistré' : (lang === 'ar' ? 'لا يوجد مراكز مسجلة' : 'No partner clinic listed');
+        clinicsBox.innerHTML = `
+            <h4>🏥 ${labelClinics}</h4>
+            <p style="font-size: 13px; color: var(--text-secondary);">${noClinicsLabel}</p>
+        `;
+    }
+
+    if (map) {
+        map.flyTo([20, 0], 2, {
+            animate: true,
+            duration: 2.0
+        });
     }
 }
 
@@ -458,6 +601,27 @@ window.focusClinic = function(clinicId) {
     }
 };
 
+// Global selection trigger for suggestion list
+window.selectEmergencyCountry = function(code, name) {
+    const searchInput = document.getElementById('emergSearchInput');
+    const suggestionsBox = document.getElementById('emergSearchSuggestions');
+    if (searchInput) searchInput.value = name;
+    if (suggestionsBox) suggestionsBox.classList.remove('active');
+
+    if (code === 'global') {
+        populateEmergencyFallback(name);
+    } else {
+        populateEmergency(code);
+        const country = globalCountriesList.find(c => c.code === code);
+        if (country && map) {
+            map.flyTo(country.latLng, 6, {
+                animate: true,
+                duration: 1.5
+            });
+        }
+    }
+};
+
 // Initialize language and Leaflet map
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('sanitizor_lang') || 'en';
@@ -467,10 +631,19 @@ document.addEventListener('DOMContentLoaded', () => {
         langSwitcher.value = savedLang;
         langSwitcher.addEventListener('change', (e) => {
             setLanguage(e.target.value);
-            // Re-render emergency translations
-            const emergCountrySelect = document.getElementById('emergCountrySelect');
-            if (emergCountrySelect) {
-                populateEmergency(emergCountrySelect.value);
+            // Re-sync emergency placeholder and current search result
+            const searchInput = document.getElementById('emergSearchInput');
+            if (searchInput && searchInput.value) {
+                const query = searchInput.value.toLowerCase().trim();
+                const matched = globalCountriesList.find(c => 
+                    c.nameEn.toLowerCase() === query || 
+                    c.nameFr.toLowerCase() === query || 
+                    c.nameAr.toLowerCase() === query
+                );
+                if (matched) {
+                    populateEmergency(matched.code);
+                    searchInput.value = e.target.value === 'fr' ? matched.nameFr : (e.target.value === 'ar' ? matched.nameAr : matched.nameEn);
+                }
             }
         });
     }
@@ -502,30 +675,58 @@ document.addEventListener('DOMContentLoaded', () => {
             clinicMarkers[clinic.id] = marker;
         });
 
-        // Setup emergency dispatch selector
-        const emergCountrySelect = document.getElementById('emergCountrySelect');
-        if (emergCountrySelect) {
+        // Setup emergency dispatch autocomplete search input
+        const searchInput = document.getElementById('emergSearchInput');
+        const suggestionsBox = document.getElementById('emergSearchSuggestions');
+        if (searchInput && suggestionsBox) {
+            const defaultCountry = globalCountriesList.find(c => c.code === 'ma');
+            const countryName = savedLang === 'fr' ? defaultCountry.nameFr : (savedLang === 'ar' ? defaultCountry.nameAr : defaultCountry.nameEn);
+            searchInput.value = countryName;
             populateEmergency('ma');
 
-            emergCountrySelect.addEventListener('change', (e) => {
-                const country = e.target.value;
-                populateEmergency(country);
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const currentLang = localStorage.getItem('sanitizor_lang') || 'en';
                 
-                // Fly to target country on map selection
-                const coordinates = {
-                    ma: [31.7917, -7.0926],
-                    tr: [38.9637, 35.2433],
-                    ae: [23.4241, 53.8478],
-                    dz: [28.0339, 1.6596],
-                    tn: [33.8869, 9.5375],
-                    eg: [26.8206, 30.8025]
-                };
+                if (!query) {
+                    suggestionsBox.classList.remove('active');
+                    return;
+                }
 
-                if (coordinates[country]) {
-                    map.flyTo(coordinates[country], 6, {
-                        animate: true,
-                        duration: 1.5
+                const filtered = globalCountriesList.filter(c => 
+                    c.nameEn.toLowerCase().includes(query) || 
+                    c.nameFr.toLowerCase().includes(query) || 
+                    c.nameAr.toLowerCase().includes(query) ||
+                    c.code.toLowerCase().includes(query)
+                );
+
+                if (filtered.length > 0) {
+                    let suggestionsHtml = '';
+                    filtered.forEach(c => {
+                        const name = currentLang === 'fr' ? c.nameFr : (currentLang === 'ar' ? c.nameAr : c.nameEn);
+                        suggestionsHtml += `
+                            <div class="suggestion-item" onclick="selectEmergencyCountry('${c.code}', '${name.replace(/'/g, "\\'")}')">
+                                📍 ${name} (${c.code.toUpperCase()})
+                            </div>
+                        `;
                     });
+                    suggestionsBox.innerHTML = suggestionsHtml;
+                    suggestionsBox.classList.add('active');
+                } else {
+                    const globalLabel = currentLang === 'fr' ? 'Numéros d\'urgence Internationaux' : (currentLang === 'ar' ? 'طوارئ دولية' : 'International Emergency Numbers');
+                    suggestionsBox.innerHTML = `
+                        <div class="suggestion-item" onclick="selectEmergencyCountry('global', '${query.replace(/'/g, "\\'")}')">
+                            🌍 ${query} (${globalLabel})
+                        </div>
+                    `;
+                    suggestionsBox.classList.add('active');
+                }
+            });
+
+            // Close suggestions on clicking outside
+            document.addEventListener('click', (e) => {
+                if (e.target !== searchInput && e.target !== suggestionsBox) {
+                    suggestionsBox.classList.remove('active');
                 }
             });
         }

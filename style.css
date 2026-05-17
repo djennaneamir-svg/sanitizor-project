@@ -2239,5 +2239,43 @@ html[dir="rtl"] .copy-toast {
     }
 }
 
+.search-suggestions-box {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border: 1px solid rgba(10, 25, 49, 0.08);
+    border-radius: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.search-suggestions-box.active {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: background 0.2s ease;
+    text-align: left;
+}
+
+html[dir="rtl"] .suggestion-item {
+    text-align: right;
+}
+
+.suggestion-item:hover {
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--accent);
+}
+
+
 
 

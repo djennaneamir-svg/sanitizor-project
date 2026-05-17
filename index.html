@@ -422,16 +422,12 @@
                     </div>
                     <p style="color: var(--text-secondary); margin-bottom: 20px;" data-i18n="emerg_dispatch_desc">Select a target country to load verified regional emergency hotlines and pharmacies of guard.</p>
                     
-                    <div class="filter-group" style="margin-bottom: 24px;">
-                        <label for="emergCountrySelect" data-i18n="search_country_placeholder" style="font-weight: 600;">Select Country</label>
-                        <select id="emergCountrySelect" class="lang-switcher" style="width: 100%; border: 1px solid rgba(10, 25, 49, 0.1); border-radius: 6px; padding: 12px; margin-top: 8px;">
-                            <option value="ma">Morocco (المغرب)</option>
-                            <option value="tr">Turkey (Türkiye)</option>
-                            <option value="ae">United Arab Emirates (الإمارات)</option>
-                            <option value="dz">Algeria (الجزائر)</option>
-                            <option value="tn">Tunisia (تونس)</option>
-                            <option value="eg">Egypt (مصر)</option>
-                        </select>
+                    <div class="filter-group" style="position: relative; margin-bottom: 24px;">
+                        <label for="emergSearchInput" style="font-weight: 600;" data-i18n="search_country_placeholder">Select Country</label>
+                        <input type="text" id="emergSearchInput" placeholder="Search country (e.g. Morocco, France, USA...)" class="lang-switcher" style="width: 100%; border: 1px solid rgba(10, 25, 49, 0.1); border-radius: 6px; padding: 12px; margin-top: 8px; font-size: 14px;" autocomplete="off">
+                        <div id="emergSearchSuggestions" class="search-suggestions-box">
+                            <!-- Suggestions populated dynamically by main.js -->
+                        </div>
                     </div>
 
                     <div class="emerg-hotline-box" id="emergHotlineBox">
