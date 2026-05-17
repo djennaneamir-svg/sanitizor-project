@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <!-- Vertical Leaf Gradient: Vibrant Mint to Light Mint -->
+    <linearGradient id="vertGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#34D399" />
+    </linearGradient>
+    <!-- Horizontal Leaf Gradient: Deep Emerald to Vibrant Mint -->
+    <linearGradient id="horizGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <!-- Central Core Gradient: Premium Gold/Amber for Prestige -->
+    <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+  </defs>
+  <!-- Beautiful organic leaf-cross geometry -->
+  <!-- Vertical Bar (Leaf Shape) -->
+  <path d="M60,15 C72,35 72,60 60,85 C48,60 48,35 60,15 Z" fill="url(#vertGrad)" />
+  <!-- Horizontal Bar (Leaf Shape) -->
+  <path d="M15,60 C35,72 60,72 85,60 C60,48 35,48 15,60 Z" fill="url(#horizGrad)" />
+  <!-- Inner Golden Spark/Core of Health (High contrast) -->
+  <circle cx="60" cy="60" r="14" fill="url(#coreGrad)" />
+  <circle cx="60" cy="60" r="6" fill="#ffffff" />
+</svg>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANITIZOR - Compare, Evaluate, Choose with Confidence</title>
+    <meta name="description" content="The trusted healthcare comparison platform for Africa, Middle East & Turkey. Find the best hospitals, read verified reviews, and make informed health decisions.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet"> <!-- For Arabic -->
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="container nav-inner">
+            <a href="#" class="nav-logo">
+                <img src="./imgs/logo.svg" alt="SANITIZOR">
+                <span>SANITIZOR</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#features" data-i18n="nav_features">Features</a>
+                <a href="#regions" data-i18n="nav_regions">Regions</a>
+                <a href="#how-it-works" data-i18n="nav_how_it_works">How It Works</a>
+                <a href="#contact" data-i18n="nav_contact">Contact</a>
+                <div class="nav-auth-buttons">
+                    <a href="inscription.html?type=patient" class="btn btn-outline btn-small" data-i18n="nav_reg_patient">Patient</a>
+                    <a href="inscription.html?type=doctor" class="btn btn-primary btn-small" data-i18n="nav_reg_doctor">Practitioner</a>
+                </div>
+            </div>
+            
+            <div class="nav-right">
+                <select id="langSwitcher" class="lang-switcher">
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                    <option value="ar">AR</option>
+                </select>
+                <div class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1 data-i18n="hero_title">Your Health Journey Starts Here</h1>
+            <p class="hero-subtitle" data-i18n="hero_subtitle">Compare, Evaluate, Choose with Confidence</p>
+            <p class="hero-tagline" data-i18n="hero_tagline">The trusted healthcare comparison platform for Africa, Middle East & Turkey</p>
+
+            <form class="hero-search-form" id="heroSearchForm">
+                <div class="search-input-group">
+                    <label for="searchSpecialty" class="sr-only" data-i18n="search_specialty_placeholder">Select Specialty</label>
+                    <select id="searchSpecialty" required>
+                        <option value="" disabled selected data-i18n="search_specialty_placeholder">Select Specialty</option>
+                        <option value="cardiology" data-i18n="spec_cardio">Cardiology</option>
+                        <option value="dentistry" data-i18n="spec_dent">Dentistry</option>
+                        <option value="dermatology" data-i18n="spec_derma">Dermatology</option>
+                        <option value="ent" data-i18n="spec_ent">ENT</option>
+                        <option value="gastroenterology" data-i18n="spec_gastro">Gastroenterology</option>
+                        <option value="general_surgery" data-i18n="spec_general">General Surgery</option>
+                        <option value="gynecology" data-i18n="spec_gyne">Gynecology</option>
+                        <option value="neurology" data-i18n="spec_neuro">Neurology</option>
+                        <option value="oncology" data-i18n="spec_onco">Oncology</option>
+                        <option value="ophthalmology" data-i18n="spec_ophthal">Ophthalmology</option>
+                        <option value="orthopedics" data-i18n="spec_ortho">Orthopedics</option>
+                        <option value="pediatrics" data-i18n="spec_pedia">Pediatrics</option>
+                        <option value="plastic_surgery" data-i18n="spec_plastic">Plastic Surgery</option>
+                        <option value="urology" data-i18n="spec_uro">Urology</option>
+                    </select>
+                </div>
+                
+                <div class="search-input-group">
+                    <label for="searchCountry" class="sr-only" data-i18n="search_country_placeholder">Select Country</label>
+                    <select id="searchCountry" required>
+                        <option value="" disabled selected data-i18n="search_country_placeholder">Select Country</option>
+                        <optgroup label="Africa" data-i18n-label="region_africa">
+                            <option value="ma" data-i18n="country_ma">Morocco</option>
+                            <option value="dz" data-i18n="country_dz">Algeria</option>
+                            <option value="tn" data-i18n="country_tn">Tunisia</option>
+                            <option value="ly" data-i18n="country_ly">Libya</option>
+                            <option value="eg" data-i18n="country_eg">Egypt</option>
+                            <option value="sn" data-i18n="country_sn">Senegal</option>
+                            <option value="ci" data-i18n="country_ci">Ivory Coast</option>
+                            <option value="cm" data-i18n="country_cm">Cameroon</option>
+                            <option value="gh" data-i18n="country_gh">Ghana</option>
+                            <option value="et" data-i18n="country_et">Ethiopia</option>
+                            <option value="rw" data-i18n="country_rw">Rwanda</option>
+                            <option value="za" data-i18n="country_za">South Africa</option>
+                            <option value="ke" data-i18n="country_ke">Kenya</option>
+                            <option value="ng" data-i18n="country_ng">Nigeria</option>
+                        </optgroup>
+                        <optgroup label="Middle East" data-i18n-label="region_me">
+                            <option value="ae" data-i18n="country_ae">United Arab Emirates</option>
+                            <option value="sa" data-i18n="country_sa">Saudi Arabia</option>
+                            <option value="qa" data-i18n="country_qa">Qatar</option>
+                            <option value="kw" data-i18n="country_kw">Kuwait</option>
+                            <option value="om" data-i18n="country_om">Oman</option>
+                            <option value="bh" data-i18n="country_bh">Bahrain</option>
+                            <option value="jo" data-i18n="country_jo">Jordan</option>
+                            <option value="lb" data-i18n="country_lb">Lebanon</option>
+                            <option value="iq" data-i18n="country_iq">Iraq</option>
+                            <option value="ye" data-i18n="country_ye">Yemen</option>
+                            <option value="sy" data-i18n="country_sy">Syria</option>
+                            <option value="ps" data-i18n="country_ps">Palestine</option>
+                        </optgroup>
+                        <optgroup label="Turkey" data-i18n-label="region_turkey">
+                            <option value="tr" data-i18n="country_tr">Turkey</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <!-- Dynamic Region Sub-search Selector -->
+                <div class="search-input-group" id="regionInputGroup" style="display: none; opacity: 0; transition: all 0.3s ease;">
+                    <label for="searchRegion" class="sr-only" data-i18n="search_region_placeholder">Select Region</label>
+                    <select id="searchRegion">
+                        <option value="" disabled selected data-i18n="search_region_placeholder">Select Region</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary" data-i18n="search_btn">Search</button>
+            </form>
+            <div class="success-message" id="heroSuccess" data-i18n="search_success">
+                Redirecting to search results...
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label" data-i18n="stat_reviews">Reviews Collected</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label" data-i18n="stat_hospitals">Partner Hospitals</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label" data-i18n="stat_countries">Countries</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition -->
+    <section class="values" id="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 data-i18n="features_title">Why Choose SANITIZOR?</h2>
+                <p data-i18n="features_subtitle">We bring transparency to healthcare decisions across emerging markets</p>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card fade-in">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="feature_1_title">Verified Reviews</h3>
+                    <p data-i18n="feature_1_desc">Every review is authenticated through our verification process, ensuring you get genuine patient experiences from people who've actually visited these facilities.</p>
+                </div>
+
+                <div class="value-card fade-in">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="feature_2_title">Expert Rankings</h3>
+                    <p data-i18n="feature_2_desc">Our proprietary ranking system analyzes clinical outcomes, patient satisfaction, accreditations, and facility quality to deliver data-driven recommendations.</p>
+                </div>
+
+                <div class="value-card fade-in">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                            <path d="M2 12h2"></path>
+                            <path d="M20 12h2"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="feature_3_title">Transparent Pricing</h3>
+                    <p data-i18n="feature_3_desc">Compare treatment costs across facilities with clear, upfront pricing information. No hidden fees, no surprises. Make financial decisions with confidence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Medical Packages Section -->
+    <section class="packages-section" id="packages">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 data-i18n="packages_title">Compare Global Medical Packages</h2>
+                <p data-i18n="packages_subtitle">Analyze full transparent package costs and inclusions side-by-side across key destinations</p>
+            </div>
+            
+            <div class="packages-grid">
+                <!-- Package 1: Dental Implants -->
+                <div class="package-card fade-in">
+                    <div class="package-tag">Popular</div>
+                    <h3 data-i18n="pkg1_title">Premium Dental Implant Package</h3>
+                    <p class="package-desc" data-i18n="pkg1_desc">Full restoration package with world-class clinics, including transfer and hotel.</p>
+                    <div class="package-comparison-list">
+                        <div class="pkg-destination">
+                            <span class="dest-name">Morocco</span>
+                            <span class="dest-price">$1,800</span>
+                        </div>
+                        <div class="pkg-destination">
+                            <span class="dest-name">Turkey</span>
+                            <span class="dest-price">$1,200</span>
+                        </div>
+                        <div class="pkg-destination">
+                            <span class="dest-name">UAE (Dubai)</span>
+                            <span class="dest-price">$3,100</span>
+                        </div>
+                    </div>
+                    <div class="package-inclusions">
+                        <strong data-i18n="pkg_inclusions">Includes:</strong>
+                        <span>Hotel Stay, VIP Airport Transfers, 3D Imaging, Local Guide</span>
+                    </div>
+                    <a href="recherche.html?specialty=dentistry" class="btn btn-outline btn-full" data-i18n="btn_view_clinics">View Clinics</a>
+                </div>
+
+                <!-- Package 2: Cardiology Check-up -->
+                <div class="package-card fade-in">
+                    <div class="package-tag" style="background: var(--primary);">Essential</div>
+                    <h3 data-i18n="pkg2_title">Executive Cardiology Screening</h3>
+                    <p class="package-desc" data-i18n="pkg2_desc">Comprehensive cardiovascular assessment under senior cardiologists with advanced tests.</p>
+                    <div class="package-comparison-list">
+                        <div class="pkg-destination">
+                            <span class="dest-name">Morocco</span>
+                            <span class="dest-price">$650</span>
+                        </div>
+                        <div class="pkg-destination">
+                            <span class="dest-name">Turkey</span>
+                            <span class="dest-price">$450</span>
+                        </div>
+                        <div class="pkg-destination">
+                            <span class="dest-name">UAE (Dubai)</span>
+                            <span class="dest-price">$1,200</span>
+                        </div>
+                    </div>
+                    <div class="package-inclusions">
+                        <strong data-i18n="pkg_inclusions">Includes:</strong>
+                        <span>MRI Assessment, Stress ECG, Blood Panels, Specialist Consultation</span>
+                    </div>
+                    <a href="recherche.html?specialty=cardiology" class="btn btn-outline btn-full" data-i18n="btn_view_clinics">View Clinics</a>
+                </div>
+
+                <!-- Package 3: Plastic Surgery -->
+                <div class="package-card fade-in">
+                    <div class="package-tag" style="background: #f59e0b;">Premium</div>
+                    <h3 data-i18n="pkg3_title">Hair Restoration & Wellness</h3>
+                    <p class="package-desc" data-i18n="pkg3_desc">Advanced FUE/DHI hair transplantation using state-of-the-art sapphire scalpels.</p>
+                    <div class="package-comparison-list">
+                        <div class="pkg-destination">
+                            <span class="dest-name">Morocco</span>
+                            <span class="dest-price">$2,200</span>
+                        </div>
+                        <div class="pkg-destination">
+                            <span class="dest-name">Turkey</span>
+                            <span class="dest-price">$1,600</span>
+                        </div>
+                        <div class="pkg-destination">
+                            <span class="dest-name">UAE (Dubai)</span>
+                            <span class="dest-price">$4,500</span>
+                        </div>
+                    </div>
+                    <div class="package-inclusions">
+                        <strong data-i18n="pkg_inclusions">Includes:</strong>
+                        <span>5-Star Hotel, Airport VIP Transfer, PRP Therapy, Post-op Care Kit</span>
+                    </div>
+                    <a href="recherche.html?specialty=plastic_surgery" class="btn btn-outline btn-full" data-i18n="btn_view_clinics">View Clinics</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regions Section -->
+    <section class="regions" id="regions">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 data-i18n="regions_title">Coverage Across Key Regions</h2>
+                <p data-i18n="regions_subtitle">From North Africa to the Gulf, we're expanding healthcare transparency</p>
+            </div>
+
+            <div class="regions-grid">
+                <div class="region-card fade-in">
+                    <div class="region-image" style="background-image: url('./imgs/section_africa.png')"></div>
+                    <div class="region-content">
+                        <h3 data-i18n="region_africa">Africa</h3>
+                        <p data-i18n="region_africa_desc">Leading medical destinations in North and Sub-Saharan Africa</p>
+                        <div class="region-countries">
+                            <span class="country-tag">Morocco</span>
+                            <span class="country-tag">Tunisia</span>
+                            <span class="country-tag">Egypt</span>
+                            <span class="country-tag">South Africa</span>
+                            <span class="country-tag">Kenya</span>
+                            <span class="country-tag">Nigeria</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="region-card fade-in">
+                    <div class="region-image" style="background-image: url('./imgs/section_middle_east.png')"></div>
+                    <div class="region-content">
+                        <h3 data-i18n="region_me">Middle East</h3>
+                        <p data-i18n="region_me_desc">Premium healthcare hubs in the Gulf and Levant</p>
+                        <div class="region-countries">
+                            <span class="country-tag">UAE</span>
+                            <span class="country-tag">Saudi Arabia</span>
+                            <span class="country-tag">Qatar</span>
+                            <span class="country-tag">Jordan</span>
+                            <span class="country-tag">Israel</span>
+                            <span class="country-tag">Lebanon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="region-card fade-in">
+                    <div class="region-image" style="background-image: url('./imgs/section_turkey.png')"></div>
+                    <div class="region-content">
+                        <h3 data-i18n="region_turkey">Turkey</h3>
+                        <p data-i18n="region_turkey_desc">World-class medical tourism destination</p>
+                        <div class="region-countries">
+                            <span class="country-tag">Istanbul</span>
+                            <span class="country-tag">Ankara</span>
+                            <span class="country-tag">Izmir</span>
+                            <span class="country-tag">Antalya</span>
+                            <span class="country-tag">Bodrum</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 data-i18n="how_title">How It Works</h2>
+                <p data-i18n="how_subtitle">Finding the right healthcare is simpler than you think</p>
+            </div>
+
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h4 data-i18n="step_1_title">Search Your Condition</h4>
+                    <p data-i18n="step_1_desc">Find treatments and procedures relevant to your needs</p>
+                </div>
+
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h4 data-i18n="step_2_title">Compare Facilities</h4>
+                    <p data-i18n="step_2_desc">View ratings, reviews, and pricing across hospitals</p>
+                </div>
+
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h4 data-i18n="step_3_title">Read Verified Reviews</h4>
+                    <p data-i18n="step_3_desc">Get authentic feedback from real patients</p>
+                </div>
+
+                <div class="step fade-in">
+                    <div class="step-number">4</div>
+                    <h4 data-i18n="step_4_title">Make Decisions</h4>
+                    <p data-i18n="step_4_desc">Choose with confidence and peace of mind</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust">
+        <div class="container">
+            <div class="trust-grid">
+                <div class="trust-item fade-in">
+                    <div class="trust-number">50K+</div>
+                    <div class="trust-label" data-i18n="trust_reviews">Verified Patient Reviews</div>
+                </div>
+                <div class="trust-item fade-in">
+                    <div class="trust-number">500+</div>
+                    <div class="trust-label" data-i18n="trust_hospitals">Partner Hospitals</div>
+                </div>
+                <div class="trust-item fade-in">
+                    <div class="trust-number">20+</div>
+                    <div class="trust-label" data-i18n="trust_countries">Countries Covered</div>
+                </div>
+                <div class="trust-item fade-in">
+                    <div class="trust-number">98%</div>
+                    <div class="trust-label" data-i18n="trust_satisfaction">User Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Map Section -->
+    <section class="emergency-map-section" id="emergency-hub">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 data-i18n="map_title">Emergency & Partner Clinic Hub</h2>
+                <p data-i18n="map_subtitle">Locate nearby verified medical centers and access direct regional emergency dispatch</p>
+            </div>
+
+            <div class="emergency-grid">
+                <!-- Left Pane: Emergency Contacts Panel -->
+                <div class="emergency-contacts-card fade-in">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                        <span class="dispatch-live-badge"></span>
+                        <h3 data-i18n="emerg_dispatch_title" style="margin-bottom: 0;">Regional Dispatch</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;" data-i18n="emerg_dispatch_desc">Select a target country to load verified regional emergency hotlines and pharmacies of guard.</p>
+                    
+                    <div class="filter-group" style="margin-bottom: 24px;">
+                        <label for="emergCountrySelect" data-i18n="search_country_placeholder" style="font-weight: 600;">Select Country</label>
+                        <select id="emergCountrySelect" class="lang-switcher" style="width: 100%; border: 1px solid rgba(10, 25, 49, 0.1); border-radius: 6px; padding: 12px; margin-top: 8px;">
+                            <option value="ma">Morocco (المغرب)</option>
+                            <option value="tr">Turkey (Türkiye)</option>
+                            <option value="ae">United Arab Emirates (الإمارات)</option>
+                            <option value="dz">Algeria (الجزائر)</option>
+                            <option value="tn">Tunisia (تونس)</option>
+                            <option value="eg">Egypt (مصر)</option>
+                        </select>
+                    </div>
+
+                    <div class="emerg-hotline-box" id="emergHotlineBox">
+                        <!-- Populated dynamically by main.js -->
+                    </div>
+
+                    <div class="emerg-partners-box" id="emergPartnersBox" style="margin-top: 24px;">
+                        <!-- Populated dynamically by main.js -->
+                    </div>
+
+                    <div class="emerg-clinics-list" id="emergClinicsBox">
+                        <!-- Populated dynamically by main.js -->
+                    </div>
+                </div>
+
+                <!-- Right Pane: Leaflet Interactive Map -->
+                <div class="map-wrapper fade-in">
+                    <div id="sanitizorMap" style="width: 100%; height: 450px; border-radius: 12px; border: 1px solid rgba(10,25,49,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); z-index: 1;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 data-i18n="faq_title">Frequently Asked Questions</h2>
+                <p data-i18n="faq_subtitle">Everything you need to know about our healthcare comparison platform</p>
+            </div>
+
+            <div class="faq-accordion-container fade-in">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span data-i18n="faq_q1">How does SANITIZOR verify reviews?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a1">All patient reviews undergo a rigorous validation process. We verify patient treatment dates, receipts, and clinical appointments before any review is published to ensure absolute authenticity.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span data-i18n="faq_q2">Are the treatment prices listed up-to-date?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a2">Yes. We update cost estimations quarterly in collaboration with our network of partner clinics and hospitals. However, actual pricing depends on individual diagnostics.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span data-i18n="faq_q3">Can I book medical appointments directly through the platform?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a3">Absolutely. Once registered as a patient, you can select your doctor, choose a slot, and secure your consultation directly with full digital convenience.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span data-i18n="faq_q4">Is my personal health data safe on SANITIZOR?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p data-i18n="faq_a4">Security is our highest priority. All medical information, appointment logs, and patient records are encrypted end-to-end according to global healthcare data regulations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="waitlist">
+        <div class="container">
+            <h2 class="fade-in" data-i18n="cta_title">Be the First to Know</h2>
+            <p class="fade-in" data-i18n="cta_subtitle">Join our waitlist and get early access when we launch</p>
+
+            <form class="cta-form fade-in" id="ctaForm">
+                <input type="email" placeholder="Enter your email address" required id="ctaEmail" data-i18n-placeholder="cta_placeholder">
+                <button type="submit" class="btn btn-primary" data-i18n="cta_btn">Join Waitlist</button>
+            </form>
+            <div class="success-message" id="ctaSuccess" data-i18n="cta_success">
+                Thank you! You've been added to our waitlist. We'll be in touch soon.
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="./imgs/logo.svg" alt="SANITIZOR">
+                    <span>SANITIZOR</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#" data-i18n="footer_privacy">Privacy Policy</a>
+                    <a href="#" data-i18n="footer_terms">Terms of Service</a>
+                    <a href="#" data-i18n="footer_contact">Contact Us</a>
+                    <a href="#" data-i18n="footer_hospitals">For Hospitals</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-i18n="footer_copyright">&copy; 2025 SANITIZOR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="translations.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
+

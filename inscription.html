@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANITIZOR - Join the Healthcare Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-body">
+    <!-- Mini Navbar for Registration Page -->
+    <nav class="nav scrolled">
+        <div class="container nav-inner">
+            <a href="index.html" class="nav-logo">
+                <img src="./imgs/logo.svg" alt="SANITIZOR">
+                <span>SANITIZOR</span>
+            </a>
+            <div class="nav-right">
+                <select id="langSwitcher" class="lang-switcher">
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                    <option value="ar">AR</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Registration Section -->
+    <section class="auth-section">
+        <div class="container auth-container">
+            <!-- Left Side: Branding / Welcome Card -->
+            <div class="auth-sidebar">
+                <div class="auth-sidebar-content">
+                    <img src="./imgs/logo.svg" alt="SANITIZOR Logo" class="auth-sidebar-logo">
+                    <h2 id="sidebarTitle" data-i18n="hero_title">Your Health Journey Starts Here</h2>
+                    <p id="sidebarSubtitle" data-i18n="hero_tagline">The trusted healthcare platform for Africa, Middle East & Turkey</p>
+                </div>
+            </div>
+
+            <!-- Right Side: Form Card -->
+            <div class="auth-form-card">
+                <h2 id="formTitle" data-i18n="reg_title_patient">Create Account</h2>
+                
+                <form id="registrationForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="regName" data-i18n="label_name">Full Name</label>
+                        <input type="text" id="regName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regEmail" data-i18n="label_email">Email Address</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword" data-i18n="label_password">Password</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+
+                    <!-- Patient Specific Field -->
+                    <div class="form-group" id="patientFields">
+                        <label for="regBirthdate" data-i18n="label_birthdate">Date of Birth</label>
+                        <input type="date" id="regBirthdate">
+                    </div>
+
+                    <!-- Doctor Specific Field -->
+                    <div class="form-group hidden" id="doctorFields">
+                        <label for="regLicense" data-i18n="label_license">Medical License Number</label>
+                        <input type="text" id="regLicense">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPhone" data-i18n="label_phone">Phone Number</label>
+                        <input type="tel" id="regPhone" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full" data-i18n="btn_register">Register Now</button>
+                </form>
+
+                <div class="success-message" id="regSuccess" data-i18n="reg_success">
+                    Registration successful! Redirecting...
+                </div>
+
+                <div class="auth-switch">
+                    <a href="#" id="switchTypeLink" data-i18n="btn_switch_to_doctor">Are you a practitioner? Register here</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top: auto;">
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p data-i18n="footer_copyright">&copy; 2025 SANITIZOR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Translation / Logic script -->
+    <script src="translations.js"></script>
+    <script>
+        // Track current registration type
+        let currentType = 'patient';
+
+        // URL parameter detection
+        function getRegTypeFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('type') === 'doctor' ? 'doctor' : 'patient';
+        }
+
+        // Setup the form fields based on registration type (Patient / Doctor)
+        function setFormType(type) {
+            currentType = type;
+            const formTitle = document.getElementById('formTitle');
+            const patientFields = document.getElementById('patientFields');
+            const doctorFields = document.getElementById('doctorFields');
+            const switchTypeLink = document.getElementById('switchTypeLink');
+            const regBirthdate = document.getElementById('regBirthdate');
+            const regLicense = document.getElementById('regLicense');
+
+            if (type === 'doctor') {
+                formTitle.setAttribute('data-i18n', 'reg_title_doctor');
+                switchTypeLink.setAttribute('data-i18n', 'btn_switch_to_patient');
+                
+                patientFields.classList.add('hidden');
+                doctorFields.classList.remove('hidden');
+                
+                regBirthdate.removeAttribute('required');
+                regLicense.setAttribute('required', 'true');
+            } else {
+                formTitle.setAttribute('data-i18n', 'reg_title_patient');
+                switchTypeLink.setAttribute('data-i18n', 'btn_switch_to_doctor');
+                
+                patientFields.classList.remove('hidden');
+                doctorFields.classList.add('hidden');
+                
+                regBirthdate.setAttribute('required', 'true');
+                regLicense.removeAttribute('required');
+            }
+
+            // Retranslate values
+            const activeLang = localStorage.getItem('sanitizor_lang') || 'en';
+            setLanguage(activeLang);
+        }
+
+        // Dynamic multi-language translator
+        function setLanguage(lang) {
+            localStorage.setItem('sanitizor_lang', lang);
+            
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.lang = 'ar';
+                document.body.classList.add('rtl-font');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.lang = lang;
+                document.body.classList.remove('rtl-font');
+            }
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Form Submit Handler
+        const registrationForm = document.getElementById('registrationForm');
+        const regSuccess = document.getElementById('regSuccess');
+
+        if (registrationForm && regSuccess) {
+            registrationForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerText;
+                
+                submitBtn.innerText = '...';
+                submitBtn.disabled = true;
+
+                try {
+                    // Simulate registration API save
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    const name = document.getElementById('regName').value;
+                    const email = document.getElementById('regEmail').value;
+                    
+                    const currentUser = { name, email, type: currentType };
+                    localStorage.setItem('sanitizor_current_user', JSON.stringify(currentUser));
+                    
+                    const users = JSON.parse(localStorage.getItem('sanitizor_users') || '[]');
+                    users.push(currentUser);
+                    localStorage.setItem('sanitizor_users', JSON.stringify(users));
+
+                    regSuccess.classList.add('show');
+                    registrationForm.reset();
+
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+
+                } catch (error) {
+                    console.error('Error:', error);
+                } finally {
+                    submitBtn.innerText = originalBtnText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        // Toggle user type link
+        const switchTypeLink = document.getElementById('switchTypeLink');
+        if (switchTypeLink) {
+            switchTypeLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetType = currentType === 'patient' ? 'doctor' : 'patient';
+                
+                // Update URL parameter seamlessly
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?type=' + targetType;
+                window.history.pushState({ path: newUrl }, '', newUrl);
+                
+                setFormType(targetType);
+            });
+        }
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('sanitizor_lang') || 'en';
+            const langSwitcher = document.getElementById('langSwitcher');
+            
+            if (langSwitcher) {
+                langSwitcher.value = savedLang;
+                langSwitcher.addEventListener('change', (e) => {
+                    setLanguage(e.target.value);
+                });
+            }
+            
+            const startType = getRegTypeFromURL();
+            setFormType(startType);
+        });
+    </script>
+</body>
+</html>

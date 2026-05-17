@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANITIZOR - Search Healthcare Specialists</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="search-body">
+    <!-- Navbar -->
+    <nav class="nav scrolled">
+        <div class="container nav-inner">
+            <a href="index.html" class="nav-logo">
+                <img src="./imgs/logo.svg" alt="SANITIZOR">
+                <span>SANITIZOR</span>
+            </a>
+            <div class="nav-right">
+                <select id="langSwitcher" class="lang-switcher">
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                    <option value="ar">AR</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="section-header">
+                <h1 data-i18n="search_results_title">Available Specialists</h1>
+                <p data-i18n="search_results_subtitle">Compare top-rated practitioners verified in your target region</p>
+            </div>
+
+            <div class="search-layout">
+                <!-- Filters Sidebar -->
+                <aside class="filter-sidebar">
+                    <div class="filter-card">
+                        <h3 data-i18n="filter_title">Filter Specialists</h3>
+                        
+                        <!-- Minimum Rating Filter -->
+                        <div class="filter-group">
+                            <label data-i18n="filter_rating">Minimum Rating</label>
+                            <select id="filterRatingSelect">
+                                <option value="all">★ All Ratings</option>
+                                <option value="4.8">★ 4.8 & Above</option>
+                                <option value="4.5">★ 4.5 & Above</option>
+                                <option value="4.0">★ 4.0 & Above</option>
+                            </select>
+                        </div>
+
+                        <!-- Price Filter -->
+                        <div class="filter-group">
+                            <label data-i18n="filter_price">Cost Rating</label>
+                            <select id="filterPriceSelect">
+                                <option value="all">Any Price</option>
+                                <option value="1">$ (Budget-Friendly)</option>
+                                <option value="2">$$ (Moderate)</option>
+                                <option value="3">$$$ (Premium)</option>
+                            </select>
+                        </div>
+
+                        <button id="btnClearFilters" class="btn btn-outline btn-full" data-i18n="filter_clear">Reset Filters</button>
+                    </div>
+                </aside>
+
+                <!-- Doctor Results List -->
+                <main class="results-list" id="resultsList">
+                    <!-- Doctor Cards will be injected dynamically -->
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Comparison Bar -->
+    <div class="comparison-bar" id="comparisonBar">
+        <div class="container comparison-bar-inner">
+            <span id="compareCountText" style="font-weight: 600; font-size: 15px; color: var(--primary);">0 selected to compare</span>
+            <button class="btn btn-primary btn-sm" id="btnLaunchComparison" disabled data-i18n="btn_compare">Compare Now</button>
+        </div>
+    </div>
+
+    <!-- Comparison Modal -->
+    <div class="comparison-modal" id="comparisonModal">
+        <div class="comparison-modal-content">
+            <button class="close-modal-btn" id="closeComparisonModal">&times;</button>
+            <h2 data-i18n="compare_title" style="margin-bottom: 8px; font-family: 'Playfair Display', serif; color: var(--primary);">Specialists Comparison</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Analyze credentials, pricing index, and services side-by-side to make your choice</p>
+            <div class="comparison-table-wrapper" id="comparisonTableWrapper">
+                <!-- Table will be dynamically injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p data-i18n="footer_copyright">&copy; 2025 SANITIZOR. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Database and Search Logic Scripts -->
+    <script src="translations.js"></script>
+    <script>
+        // Micro Doctor database with rich comparative metadata
+        const doctorsDb = [
+            {
+                id: 1,
+                name: "Dr. Karim Alami",
+                specialty: "cardiology",
+                specKey: "spec_cardio",
+                country: "ma",
+                countryKey: "country_ma",
+                region: "casablanca",
+                rating: 4.9,
+                reviews: 142,
+                priceLevel: 2,
+                priceSymbol: "$$",
+                avatarLetter: "K",
+                telehealth: true,
+                languages: ["Français", "English", "العربية"]
+            },
+            {
+                id: 2,
+                name: "Dr. Sarah Benani",
+                specialty: "dermatology",
+                specKey: "spec_derma",
+                country: "ma",
+                countryKey: "country_ma",
+                region: "rabat",
+                rating: 4.7,
+                reviews: 98,
+                priceLevel: 1,
+                priceSymbol: "$",
+                avatarLetter: "S",
+                telehealth: false,
+                languages: ["Français", "العربية"]
+            },
+            {
+                id: 3,
+                name: "Dr. Ahmed Mansour",
+                specialty: "cardiology",
+                specKey: "spec_cardio",
+                country: "ae",
+                countryKey: "country_ae",
+                region: "dubai",
+                rating: 4.8,
+                reviews: 210,
+                priceLevel: 3,
+                priceSymbol: "$$$",
+                avatarLetter: "A",
+                telehealth: true,
+                languages: ["English", "العربية"]
+            },
+            {
+                id: 4,
+                name: "Dr. Yasmin Haddad",
+                specialty: "pediatrics",
+                specKey: "spec_pedia",
+                country: "jo",
+                countryKey: "country_jo",
+                region: "amman",
+                rating: 4.9,
+                reviews: 84,
+                priceLevel: 2,
+                priceSymbol: "$$",
+                avatarLetter: "Y",
+                telehealth: true,
+                languages: ["English", "العربية"]
+            },
+            {
+                id: 5,
+                name: "Dr. Selim Yilmaz",
+                specialty: "orthopedics",
+                specKey: "spec_ortho",
+                country: "tr",
+                countryKey: "country_tr",
+                region: "ankara",
+                rating: 4.6,
+                reviews: 175,
+                priceLevel: 2,
+                priceSymbol: "$$",
+                avatarLetter: "S",
+                telehealth: false,
+                languages: ["Türkçe", "English"]
+            },
+            {
+                id: 6,
+                name: "Dr. Elif Demir",
+                specialty: "plastic_surgery",
+                specKey: "spec_plastic",
+                country: "tr",
+                countryKey: "country_tr",
+                region: "istanbul",
+                rating: 4.9,
+                reviews: 312,
+                priceLevel: 3,
+                priceSymbol: "$$$",
+                avatarLetter: "E",
+                telehealth: true,
+                languages: ["Türkçe", "English", "Français"]
+            },
+            {
+                id: 7,
+                name: "Dr. John Okechukwu",
+                specialty: "gastroenterology",
+                specKey: "spec_gastro",
+                country: "ng",
+                countryKey: "country_ng",
+                region: "lagos",
+                rating: 4.5,
+                reviews: 64,
+                priceLevel: 1,
+                priceSymbol: "$",
+                avatarLetter: "J",
+                telehealth: true,
+                languages: ["English"]
+            }
+        ];
+
+        // Read query parameters
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                specialty: params.get('specialty') || '',
+                country: params.get('country') || '',
+                region: params.get('region') || ''
+            };
+        }
+
+        // Render matched results
+        function renderResults() {
+            const query = getQueryParams();
+            const minRating = document.getElementById('filterRatingSelect').value;
+            const priceLevel = document.getElementById('filterPriceSelect').value;
+            const resultsList = document.getElementById('resultsList');
+            const lang = localStorage.getItem('sanitizor_lang') || 'en';
+
+            // Filter logic including region sub-filter
+            let filteredDocs = doctorsDb.filter(doc => {
+                const specMatch = !query.specialty || doc.specialty === query.specialty;
+                const countryMatch = !query.country || doc.country === query.country;
+                const regionMatch = !query.region || doc.region === query.region;
+                const ratingMatch = minRating === 'all' || doc.rating >= parseFloat(minRating);
+                const priceMatch = priceLevel === 'all' || doc.priceLevel === parseInt(priceLevel);
+
+                return specMatch && countryMatch && regionMatch && ratingMatch && priceMatch;
+            });
+
+            // If empty, show fallback recommended doctors
+            if (filteredDocs.length === 0) {
+                resultsList.innerHTML = `
+                    <div class="no-results-card">
+                        <svg viewBox="0 0 24 24" width="48" height="48" style="color: var(--accent); margin-bottom: 16px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="currentColor"/></svg>
+                        <p data-i18n="no_results" style="font-weight: 500; font-size: 16px; color: var(--text-secondary);">No specialists match your active filters. Try resetting them.</p>
+                    </div>
+                `;
+                translatePage();
+                return;
+            }
+
+            // Generate HTML
+            resultsList.innerHTML = filteredDocs.map(doc => {
+                const docSpec = translations[lang][doc.specKey] || doc.specialty;
+                const docCountry = translations[lang][doc.countryKey] || doc.country;
+                const btnText = translations[lang]['btn_book'] || 'Book Consultation';
+                const isChecked = selectedCompareIds.includes(doc.id) ? 'checked' : '';
+
+                return `
+                    <div class="doctor-card">
+                        <div class="doctor-avatar">${doc.avatarLetter}</div>
+                        <div class="doctor-info">
+                            <div class="doctor-header-row">
+                                <h3>${doc.name}</h3>
+                                <span class="price-badge">${doc.priceSymbol}</span>
+                            </div>
+                            <p class="doctor-meta">
+                                <span class="tag-specialty">${docSpec}</span>
+                                <span class="tag-country">${docCountry}</span>
+                            </p>
+                            <div class="doctor-rating">
+                                <span class="stars">★ ${doc.rating}</span>
+                                <span class="reviews-count">(${doc.reviews} reviews)</span>
+                            </div>
+                        </div>
+                        <div class="doctor-actions">
+                            <label class="compare-checkbox-container">
+                                <input type="checkbox" class="compare-checkbox" data-id="${doc.id}" ${isChecked} onchange="handleCompareChange(this)">
+                                <span data-i18n="compare_checkbox">Compare</span>
+                            </label>
+                            <a href="inscription.html?type=patient" class="btn btn-primary">${btnText}</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            translatePage();
+        }
+
+        // Comparison Logic
+        let selectedCompareIds = [];
+
+        window.handleCompareChange = function(checkbox) {
+            const docId = parseInt(checkbox.getAttribute('data-id'));
+            if (checkbox.checked) {
+                if (selectedCompareIds.length >= 3) {
+                    checkbox.checked = false;
+                    alert(localStorage.getItem('sanitizor_lang') === 'fr' 
+                        ? "Vous pouvez comparer jusqu'à 3 médecins maximum." 
+                        : "You can compare up to 3 specialists maximum.");
+                    return;
+                }
+                if (!selectedCompareIds.includes(docId)) {
+                    selectedCompareIds.push(docId);
+                }
+            } else {
+                selectedCompareIds = selectedCompareIds.filter(id => id !== docId);
+            }
+            updateComparisonBar();
+        }
+
+        function updateComparisonBar() {
+            const comparisonBar = document.getElementById('comparisonBar');
+            const compareCountText = document.getElementById('compareCountText');
+            const btnLaunchComparison = document.getElementById('btnLaunchComparison');
+            const lang = localStorage.getItem('sanitizor_lang') || 'en';
+
+            const count = selectedCompareIds.length;
+            if (count > 0) {
+                comparisonBar.classList.add('active');
+                const label = translations[lang]['selected_compare'] || 'selected to compare';
+                compareCountText.textContent = `${count} ${label}`;
+                btnLaunchComparison.disabled = count < 2; // Compare at least 2 doctors
+            } else {
+                comparisonBar.classList.remove('active');
+            }
+        }
+
+        function renderComparisonTable() {
+            const wrapper = document.getElementById('comparisonTableWrapper');
+            const lang = localStorage.getItem('sanitizor_lang') || 'en';
+
+            const docsToCompare = doctorsDb.filter(d => selectedCompareIds.includes(d.id));
+
+            if (docsToCompare.length === 0) return;
+
+            const colPricing = translations[lang]['col_pricing'] || 'Pricing Level';
+            const colExp = translations[lang]['col_experience'] || 'Verified Quality';
+            const colTele = translations[lang]['col_telehealth'] || 'Telehealth';
+            const colLangs = translations[lang]['languages'] || 'Languages';
+
+            let headersHtml = `<th></th>`;
+            let specHtml = ``;
+            let locHtml = ``;
+            let ratingHtml = ``;
+            let priceHtml = ``;
+            let expHtml = ``;
+            let teleHtml = ``;
+            let langHtml = ``;
+            let ctaHtml = `<td></td>`;
+
+            docsToCompare.forEach(doc => {
+                const specLabel = translations[lang][doc.specKey] || doc.specialty;
+                const countryLabel = translations[lang][doc.countryKey] || doc.country;
+
+                headersHtml += `
+                    <th class="compare-col-header">
+                        <div class="compare-avatar">${doc.avatarLetter}</div>
+                        <strong>${doc.name}</strong>
+                    </th>
+                `;
+
+                specHtml += `<td style="text-align: center;"><strong>${specLabel}</strong></td>`;
+                locHtml += `<td style="text-align: center;">${countryLabel} (${doc.region ? doc.region.charAt(0).toUpperCase() + doc.region.slice(1) : ''})</td>`;
+                ratingHtml += `<td style="text-align: center;"><span style="color: var(--accent); font-weight: bold;">★ ${doc.rating}</span> (${doc.reviews} reviews)</td>`;
+                priceHtml += `<td style="text-align: center;"><strong style="color: var(--primary);">${doc.priceSymbol}</strong></td>`;
+                
+                const yesLabel = translations[lang]['yes'] || 'Yes';
+                const noLabel = translations[lang]['no'] || 'No';
+                const certLabel = translations[lang]['verified_license'] || 'Verified License';
+
+                expHtml += `<td style="text-align: center;"><span class="badge-success">✓ ${certLabel}</span></td>`;
+                teleHtml += `<td style="text-align: center;">${doc.telehealth ? `<span style="color: var(--accent);">✓ ${yesLabel}</span>` : `<span style="color: #ef4444;">✗ ${noLabel}</span>`}</td>`;
+                langHtml += `<td style="text-align: center;">${doc.languages.join(', ')}</td>`;
+                
+                const btnBook = translations[lang]['btn_book'] || 'Book';
+                ctaHtml += `
+                    <td style="text-align: center; padding: 20px;">
+                        <a href="inscription.html?type=patient" class="btn btn-primary btn-sm btn-full">${btnBook}</a>
+                    </td>
+                `;
+            });
+
+            wrapper.innerHTML = `
+                <table class="compare-table">
+                    <thead>
+                        <tr>${headersHtml}</tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>${translations[lang]['dash_appointments'] || 'Specialty'}</strong></td>
+                            ${specHtml}
+                        </tr>
+                        <tr>
+                            <td><strong>${translations[lang]['stat_countries'] || 'Location'}</strong></td>
+                            ${locHtml}
+                        </tr>
+                        <tr>
+                            <td><strong>Rating</strong></td>
+                            ${ratingHtml}
+                        </tr>
+                        <tr>
+                            <td><strong>${colPricing}</strong></td>
+                            ${priceHtml}
+                        </tr>
+                        <tr>
+                            <td><strong>${colExp}</strong></td>
+                            ${expHtml}
+                        </tr>
+                        <tr>
+                            <td><strong>${colTele}</strong></td>
+                            ${teleHtml}
+                        </tr>
+                        <tr>
+                            <td><strong>${colLangs}</strong></td>
+                            ${langHtml}
+                        </tr>
+                        <tr>
+                            <td></td>
+                            ${ctaHtml}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Global Page Translator
+        function setLanguage(lang) {
+            localStorage.setItem('sanitizor_lang', lang);
+            
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.lang = 'ar';
+                document.body.classList.add('rtl-font');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.lang = lang;
+                document.body.classList.remove('rtl-font');
+            }
+
+            renderResults(); // This will re-render list with updated translation values
+            updateComparisonBar();
+        }
+
+        function translatePage() {
+            const lang = localStorage.getItem('sanitizor_lang') || 'en';
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Event listeners
+        document.getElementById('filterRatingSelect').addEventListener('change', renderResults);
+        document.getElementById('filterPriceSelect').addEventListener('change', renderResults);
+        document.getElementById('btnClearFilters').addEventListener('click', () => {
+            document.getElementById('filterRatingSelect').value = 'all';
+            document.getElementById('filterPriceSelect').value = 'all';
+            selectedCompareIds = [];
+            updateComparisonBar();
+            renderResults();
+        });
+
+        // Launch modal comparison
+        const comparisonModal = document.getElementById('comparisonModal');
+        const btnLaunchComparison = document.getElementById('btnLaunchComparison');
+        const closeComparisonModal = document.getElementById('closeComparisonModal');
+
+        if (btnLaunchComparison && comparisonModal && closeComparisonModal) {
+            btnLaunchComparison.addEventListener('click', () => {
+                renderComparisonTable();
+                comparisonModal.classList.add('active');
+            });
+
+            closeComparisonModal.addEventListener('click', () => {
+                comparisonModal.classList.remove('active');
+            });
+
+            // Close on outer click
+            comparisonModal.addEventListener('click', (e) => {
+                if (e.target === comparisonModal) {
+                    comparisonModal.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize Page
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('sanitizor_lang') || 'en';
+            const langSwitcher = document.getElementById('langSwitcher');
+            
+            if (langSwitcher) {
+                langSwitcher.value = savedLang;
+                langSwitcher.addEventListener('change', (e) => {
+                    setLanguage(e.target.value);
+                });
+            }
+            
+            setLanguage(savedLang);
+        });
+    </script>
+</body>
+</html>
